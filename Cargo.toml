@@ -1,0 +1,15 @@
+[package]
+name = "nsga"
+version = "0.1.0"
+authors = ["Max Kuznetsov <syhpoon@syhpoon.ca>"]
+edition = "2021"
+description = "Multi-objective genetic optimization algorithm NSGA-II"
+homepage = "github.com/syhpoon/nsga"
+repository = "github.com/syhpoon/nsga"
+license = "MIT"
+keywords = ["optimization"]
+categories = ["algorithms", "science"]
+
+[dependencies]
+rand = "0.8.4"
+peeking_take_while = "0.1"
