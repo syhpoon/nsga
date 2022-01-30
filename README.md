@@ -1,7 +1,7 @@
 # nsga
 
 *nsga* is an opinionated implementation of the
-[NSGA-II (Non-dominated Sorting Genetic Algorithm)](https://ieeexplore.ieee.abstract/document/996017),
+[NSGA-II (Non-dominated Sorting Genetic Algorithm)](https://ieeexplore.ieee.org/abstract/document/996017),
 a multi-objective genetic optimization algorithm.
 
 The focus for this implementation is on practical applicability,

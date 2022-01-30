@@ -1,6 +1,6 @@
 [package]
 name = "nsga"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Max Kuznetsov <syhpoon@syhpoon.ca>"]
 edition = "2021"
 description = "Multi-objective genetic optimization algorithm NSGA-II"
