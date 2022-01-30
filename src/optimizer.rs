@@ -205,8 +205,7 @@ where
         let mut dominated_by: HashMap<SolutionId, usize> = HashMap::new();
 
         let ids: Vec<_> = pop.iter().map(|c| c.id).collect();
-        let mut sols: HashMap<SolutionId, S> =
-            pop.into_iter().map(|c| (c.id, c.sol)).collect();
+        let mut sols: HashMap<SolutionId, S> = pop.into_iter().map(|c| (c.id, c.sol)).collect();
 
         let mut fronts: Vec<HashSet<SolutionId>> = vec![HashSet::new()];
 

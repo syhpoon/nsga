@@ -9,6 +9,7 @@ repository = "github.com/syhpoon/nsga"
 license = "MIT"
 keywords = ["optimization"]
 categories = ["algorithms", "science"]
+readme = "README.md"
 
 [dependencies]
 rand = "0.8.4"

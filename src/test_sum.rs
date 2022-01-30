@@ -124,13 +124,11 @@ mod test {
         let cases = vec![
             TestCase {
                 answer: vec![1, 0, 1, 1, 0, 1, 0, 1, 1],
-                objectives: vec![
-                    Box::new(SumObjective {
-                        goal: 100.,
-                        items: vec![90., 15., 1., 2., 20., 5., 30., 1., 1.],
-                        toleration: 0.0,
-                    }),
-                ],
+                objectives: vec![Box::new(SumObjective {
+                    goal: 100.,
+                    items: vec![90., 15., 1., 2., 20., 5., 30., 1., 1.],
+                    toleration: 0.0,
+                })],
                 constraints: vec![],
             },
             TestCase {
