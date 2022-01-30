@@ -7,15 +7,19 @@ use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::convert::identity;
 
-use super::{Meta, Ratio, Solution, SolutionId};
+use super::{Meta, Ratio, Solution};
+
+type SolutionId = u64;
 
 #[derive(Debug, Clone)]
 struct Candidate<S: Solution> {
+    id: SolutionId,
     sol: S,
     front: usize,
     distance: f64,
 }
 
+/// NSGA-II optimizer
 pub struct NSGAOptimizer<'a, S: Solution> {
     meta: Box<dyn Meta<'a, S> + 'a>,
     last_id: SolutionId,
@@ -26,6 +30,7 @@ impl<'a, S> NSGAOptimizer<'a, S>
 where
     S: Solution,
 {
+    /// Instantiate a new optimizer with a given meta params
     pub fn new(meta: impl Meta<'a, S> + 'a) -> Self {
         NSGAOptimizer {
             meta: Box::new(meta),
@@ -34,6 +39,11 @@ where
         }
     }
 
+    /// Run an optimization process using `eval` to determine termination condition
+    ///
+    /// Since an optimization can produce a set of
+    /// [Pareto optimal solutions](https://en.wikipedia.org/wiki/Pareto_front),
+    /// the optimizer returns an iterator.
     pub fn optimize(&mut self, mut eval: Box<dyn Evaluator>) -> impl Iterator<Item = S> {
         let mut rnd = rand::thread_rng();
 
@@ -45,9 +55,10 @@ where
         let pop: Vec<_> = (0..pop_size)
             .map(|_| {
                 let id = self.next_id();
-                let sol = self.meta.random_solution(id);
+                let sol = self.meta.random_solution();
 
                 Candidate {
+                    id,
                     sol,
                     front: 0,
                     distance: 0.0,
@@ -119,8 +130,8 @@ where
                     c2.sol.mutate();
                 };
 
-                c1.sol.set_id(self.next_id());
-                c2.sol.set_id(self.next_id());
+                c1.id = self.next_id();
+                c2.id = self.next_id();
 
                 child_pop.push(c1);
                 child_pop.push(c2);
@@ -193,9 +204,9 @@ where
         let mut dominates: HashMap<SolutionId, HashSet<SolutionId>> = HashMap::new();
         let mut dominated_by: HashMap<SolutionId, usize> = HashMap::new();
 
-        let ids: Vec<_> = pop.iter().map(|c| c.sol.id()).collect();
+        let ids: Vec<_> = pop.iter().map(|c| c.id).collect();
         let mut sols: HashMap<SolutionId, S> =
-            pop.into_iter().map(|c| (c.sol.id(), c.sol)).collect();
+            pop.into_iter().map(|c| (c.id, c.sol)).collect();
 
         let mut fronts: Vec<HashSet<SolutionId>> = vec![HashSet::new()];
 
@@ -263,6 +274,7 @@ where
                 let sol = sols.remove(&id).unwrap();
 
                 flat_fronts.push(Candidate {
+                    id,
                     sol,
                     front: fidx,
                     distance: 0.0,

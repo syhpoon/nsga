@@ -1,7 +1,14 @@
+/// Evaluate the termination condition
 pub trait Evaluator {
+    /// Returns true if an optimization process can be stopped
     fn can_terminate(&mut self, iter: usize, values: Vec<f64>) -> bool;
 }
 
+/// Implements a default termination condition.
+///
+/// It saves best solutions on every iteration
+/// and returns when there was no improvement for the provided
+/// `terminate_early` iterations.
 pub struct DefaultEvaluator {
     terminate_early: usize,
     iter: usize,
@@ -51,7 +58,6 @@ impl Evaluator for DefaultEvaluator {
                 } else {
                     self.iter = iter;
                     self.no_improvements += 1;
-
                     self.no_improvements >= self.terminate_early
                 }
             }

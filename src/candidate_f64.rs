@@ -4,20 +4,11 @@ use std::ops::Range;
 
 #[derive(Clone, Debug)]
 pub struct CandidateF64 {
-    pub id: SolutionId,
     pub val: f64,
     range: Range<f64>,
 }
 
 impl Solution for CandidateF64 {
-    fn set_id(&mut self, id: SolutionId) {
-        self.id = id
-    }
-
-    fn id(&self) -> SolutionId {
-        self.id
-    }
-
     // SBX Crossover
     // https://youtu.be/7-NPqSvutr0?t=718
     // https://github.com/baopng/NSGA-II/blob/master/nsga2/utils.py#L89
@@ -89,9 +80,8 @@ impl<'a> Meta<'a, CandidateF64> for ParamsF64<'a> {
         self.mutation_odds
     }
 
-    fn random_solution(&mut self, id: SolutionId) -> CandidateF64 {
+    fn random_solution(&mut self) -> CandidateF64 {
         CandidateF64 {
-            id,
             val: thread_rng().gen_range(self.val_range.clone()),
             range: self.val_range.clone(),
         }

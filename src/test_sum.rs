@@ -6,19 +6,10 @@ mod test {
 
     #[derive(Clone, Debug)]
     struct Candidate {
-        id: SolutionId,
         indices: Vec<isize>,
     }
 
     impl Solution for Candidate {
-        fn set_id(&mut self, id: SolutionId) {
-            self.id = id
-        }
-
-        fn id(&self) -> SolutionId {
-            self.id
-        }
-
         fn crossover(&mut self, other: &mut Self) {
             let mut a = &mut self.indices;
             let mut b = &mut other.indices;
@@ -64,16 +55,10 @@ mod test {
                 .indices
                 .iter()
                 .enumerate()
-                .map(|(i, rec)| {
-                    if *rec == 1 {
-                        self.items[i]
-                    } else {
-                        0.
-                    }
-                })
+                .map(|(i, rec)| if *rec == 1 { self.items[i] } else { 0. })
                 .sum();
 
-            let diff = self.goal - res;
+            let diff = (self.goal - res).abs();
             if diff < 0. {
                 f64::MAX
             } else {
@@ -90,15 +75,7 @@ mod test {
 
     impl Objective<Candidate> for OnesObjective {
         fn value(&self, candidate: &Candidate) -> f64 {
-            candidate
-                .indices
-                .iter()
-                .filter(|i| **i == 1)
-                .count() as f64
-        }
-
-        fn good_enough(&self, _val: f64) -> bool {
-            false
+            candidate.indices.iter().filter(|i| **i == 1).count() as f64
         }
     }
 
@@ -121,10 +98,10 @@ mod test {
             &Ratio(1, 1)
         }
 
-        fn random_solution(&mut self, id: SolutionId) -> Candidate {
+        fn random_solution(&mut self) -> Candidate {
             let indices: Vec<isize> = (0..self.records_length).map(|_| 0).collect();
 
-            Candidate { id, indices }
+            Candidate { indices }
         }
 
         fn objectives(&self) -> &Vec<Box<dyn Objective<Candidate>>> {
@@ -153,7 +130,7 @@ mod test {
                         items: vec![90., 15., 1., 2., 20., 5., 30., 1., 1.],
                         toleration: 0.0,
                     }),
-                    Box::new(OnesObjective {})],
+                ],
                 constraints: vec![],
             },
             TestCase {
@@ -162,6 +139,18 @@ mod test {
                     Box::new(SumObjective {
                         goal: 100.,
                         items: vec![10., 20., 20., 10., 95., 10., 10., 10., 10., 5.],
+                        toleration: 0.0,
+                    }),
+                    Box::new(OnesObjective {}),
+                ],
+                constraints: vec![],
+            },
+            TestCase {
+                answer: vec![0, 1, 1, 0, 1, 0],
+                objectives: vec![
+                    Box::new(SumObjective {
+                        goal: 19.,
+                        items: vec![1., 5., 8., 0., 6., 4.],
                         toleration: 0.0,
                     }),
                     Box::new(OnesObjective {}),
@@ -179,7 +168,7 @@ mod test {
 
             let mut optimizer = NSGAOptimizer::new(meta);
             let res = optimizer
-                .optimize(Box::new(DefaultEvaluator::new(1000)))
+                .optimize(Box::new(DefaultEvaluator::new(500)))
                 .next()
                 .unwrap();
 
