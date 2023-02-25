@@ -5,7 +5,8 @@ use std::ops::Range;
 #[derive(Clone, Debug)]
 pub struct CandidateF64 {
     pub val: f64,
-    range: Range<f64>,
+    pub range_start: f64,
+    pub range_end: f64,
 }
 
 impl Solution for CandidateF64 {
@@ -35,8 +36,8 @@ impl Solution for CandidateF64 {
     fn mutate(&mut self) {
         let mutation_param: f64 = 5.;
         let u: f64 = thread_rng().gen_range(0.0..1.0);
-        let r0: f64 = self.range.start;
-        let r1: f64 = self.range.end;
+        let r0: f64 = self.range_start;
+        let r1: f64 = self.range_end;
 
         let delta = if u < 0.5 {
             (2. * u).powf(1. / (mutation_param + 1.)) - 1.
@@ -83,7 +84,8 @@ impl<'a> Meta<'a, CandidateF64> for ParamsF64<'a> {
     fn random_solution(&mut self) -> CandidateF64 {
         CandidateF64 {
             val: thread_rng().gen_range(self.val_range.clone()),
-            range: self.val_range.clone(),
+            range_start: self.val_range.start,
+            range_end: self.val_range.end,
         }
     }
 

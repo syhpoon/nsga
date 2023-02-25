@@ -9,10 +9,6 @@ mod test {
         fn value(&self, candidate: &CandidateF64) -> f64 {
             candidate.val * candidate.val
         }
-
-        fn good_enough(&self, _val: f64) -> bool {
-            false
-        }
     }
 
     pub struct SchObjective2 {}
@@ -21,10 +17,6 @@ mod test {
         fn value(&self, candidate: &CandidateF64) -> f64 {
             let x = candidate.val - 2.;
             x * x
-        }
-
-        fn good_enough(&self, _val: f64) -> bool {
-            false
         }
     }
 

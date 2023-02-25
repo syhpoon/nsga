@@ -1,6 +1,6 @@
 [package]
 name = "nsga"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Max Kuznetsov <syhpoon@syhpoon.ca>"]
 edition = "2021"
 description = "Multi-objective genetic optimization algorithm NSGA-II"
@@ -12,5 +12,9 @@ categories = ["algorithms", "science"]
 readme = "README.md"
 
 [dependencies]
-rand = "0.8.4"
-peeking_take_while = "0.1"
+rand = "0.8.5"
+peeking_take_while = "1.0.0"
+
+[[bin]]
+name = "binh-korn"
+path = "src/examples/binh-korn/main.rs"
